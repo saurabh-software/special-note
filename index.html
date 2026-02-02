@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>💌 A Special Note</title>
+
+<style>
+/* RESET */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', Arial, sans-serif;
+}
+
+/* BACKGROUND */
+body {
+  height: 100vh;
+  background: linear-gradient(135deg, #ff758c, #ff7eb3);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+/* FLOATING HEARTS */
+.heart {
+  position: absolute;
+  bottom: -20px;
+  font-size: 18px;
+  animation: float 6s linear infinite;
+  opacity: 0.6;
+}
+
+@keyframes float {
+  0% { transform: translateY(0) scale(1); }
+  100% { transform: translateY(-120vh) scale(1.4); opacity: 0; }
+}
+
+/* ENVELOPE */
+#envelope {
+  background: #fff;
+  width: 300px;
+  height: 200px;
+  border-radius: 14px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+  animation: pop 0.8s ease;
+}
+
+#envelope h2 {
+  color: #ff4d6d;
+}
+
+/* CARD (LETTER) */
+.card {
+  display: none;
+  background: #fff;
+  padding: 30px 25px;
+  border-radius: 25px;
+  text-align: center;
+  width: 90%;
+  max-width: 360px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+  animation: pop 0.8s ease;
+}
+
+@keyframes pop {
+  from { transform: scale(0.6); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.card h1 {
+  color: #ff4d6d;
+  font-size: 22px;
+}
+
+.card p {
+  margin-top: 10px;
+  color: #555;
+  font-size: 14px;
+}
+
+/* BUTTON AREA */
+.buttons {
+  margin-top: 25px;
+  position: relative;
+  height: 140px;
+}
+
+/* BUTTONS */
+button {
+  padding: 12px 22px;
+  border: none;
+  border-radius: 30px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+#yes {
+  background: #ff4d6d;
+  color: #fff;
+  transform: scale(1.1);
+}
+
+#no {
+  background: #ddd;
+  color: #333;
+  position: absolute;
+}
+</style>
+</head>
+
+<body>
+
+<!-- ENVELOPE -->
+<div id="envelope" onclick="openLetter()">
+  <h2>📩 Open Message</h2>
+</div>
+
+<!-- LETTER -->
+<div class="card">
+  <h1>Will you be my Valentine? 💖</h1>
+  <p>I already know the answer 😉</p>
+
+  <div class="buttons" id="box">
+    <button id="yes">Yes 💘</button>
+    <button id="no">No 🙈</button>
+  </div>
+</div>
+
+<script>
+/* HEARTS */
+function createHeart() {
+  const heart = document.createElement("div");
+  heart.className = "heart";
+  heart.innerText = "❤️";
+  heart.style.left = Math.random() * 100 + "vw";
+  heart.style.fontSize = (14 + Math.random() * 20) + "px";
+  document.body.appendChild(heart);
+  setTimeout(() => heart.remove(), 6000);
+}
+setInterval(createHeart, 450);
+
+/* ENVELOPE OPEN */
+function openLetter() {
+  document.getElementById("envelope").style.display = "none";
+  document.querySelector(".card").style.display = "block";
+}
+
+/* NO BUTTON — IMPOSSIBLE TO REACH */
+const noBtn = document.getElementById("no");
+const box = document.getElementById("box");
+
+box.addEventListener("mousemove", (e) => {
+  const rect = noBtn.getBoundingClientRect();
+  const distance = Math.hypot(
+    e.clientX - (rect.left + rect.width / 2),
+    e.clientY - (rect.top + rect.height / 2)
+  );
+
+  if (distance < 90) moveNo();
+});
+
+box.addEventListener("touchstart", moveNo);
+
+function moveNo() {
+  const maxX = box.clientWidth - noBtn.offsetWidth;
+  const maxY = box.clientHeight - noBtn.offsetHeight;
+  noBtn.style.left = Math.random() * maxX + "px";
+  noBtn.style.top = Math.random() * maxY + "px";
+}
+
+/* YES ACTION — NO REDIRECT */
+document.getElementById("yes").onclick = () => {
+  const card = document.querySelector(".card");
+
+  card.innerHTML = `
+    <h1 style="font-size:26px; color:#ff4d6d;">💖 YAYYY! 💖</h1>
+
+    <p style="margin-top:14px; font-size:16px; font-weight:600;">
+      You just unlocked unlimited smiles 💕
+    </p>
+
+    
+
+    <div style="margin-top:18px; font-size:22px;">
+      ❤️ 💕 ❤️ 💕 ❤️
+    </div>
+  `;
+
+  card.style.animation = "pop 0.6s ease";
+};
+
+</script>
+
+</body>
+</html>
